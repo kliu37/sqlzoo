@@ -43,5 +43,46 @@ join actor a on a.id = c.actorid
 where m.yr = '1962'
 and c.ord = 1
 
---
+--11. Which were the busiest years for 'Rock Hudson', show the year and the number of movies he made each year for any year in which he made more than 2 movies.
+SELECT yr,COUNT(title) FROM
+  movie JOIN casting ON movie.id=movieid
+        JOIN actor   ON actorid=actor.id
+WHERE name='Rock Hudson'
+GROUP BY yr 
+HAVING COUNT(title) > 2
+
+--12. List the film title and the leading actor for all of the films 'Julie Andrews' played in.
+SELECT m.title, a.name 
+from casting c join movie m on c.movieid = m.id
+join actor a on a.id = c.actorid
+WHERE c.ord = 1
+and movieid in (select movieid from casting where actorid IN (
+  SELECT id FROM actor
+  WHERE name='Julie Andrews'))
+ 
+ --13. Obtain a list, in alphabetical order, of actors who've had at least 15 starring roles.
+select a.name from actor a
+join casting c on c.actorid = a.id
+join movie m on m.id = c.movieid
+where c.ord = 1
+group by a.name
+having count(c.movieid) >= 15
+order by a.name
+ 
+ --14. List the films released in the year 1978 ordered by the number of actors in the cast, then by title.
+ select m.title, count(a.name) from movie m
+join casting c on m.id = c.movieid
+join actor a on c.actorid = a.id
+where m.yr = '1978'
+group by m.title
+order by count(a.name) DESC, m.title
+
+ 
+--15. List all the people who have worked with 'Art Garfunkel'.
+--Find out what movie this actor has been acted, and then according to the movie list find out who has played on those movie. 
+select a.name from actor a
+join casting c on c.actorid = a.id
+where movieid in (select movieid from casting where actorid in (
+select id from actor where name = 'Art Garfunkel'))
+and a.name != 'Art Garfunkel'
 
