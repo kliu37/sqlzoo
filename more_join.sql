@@ -85,4 +85,10 @@ join casting c on c.actorid = a.id
 where movieid in (select movieid from casting where actorid in (
 select id from actor where name = 'Art Garfunkel'))
 and a.name != 'Art Garfunkel'
+ 
+-- quiz, order by 1,2. this 1 and 2 is stands for the number of column, eg. In here 1 stands for name and 2 stands for COUNT(movieid)
+ SELECT name, COUNT(movieid)
+  FROM casting JOIN actor ON actorid=actor.id
+ WHERE name LIKE 'John %'
+ GROUP BY name ORDER BY 2 DESC
 
