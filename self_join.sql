@@ -42,3 +42,32 @@ and b.stop = 137
 
 --8. Give a list of the services which connect the stops 'Craiglockhart' and 'Tollcross'
 
+
+/*10.
+Find the routes involving two buses that can go from Craiglockhart to Lochend.
+Show the bus no. and company for the first bus, the name of the stop for the transfer,
+and the bus no. and company for the second bus. */
+select distinct c.num, c.company, s.name, l.num, l.company 
+from (select * from route where concat(num, company) in (select concat(r2.num, r2.company) from route r2 
+join stops s2 on r2.stop = s2.id 
+where s2.name='Craiglockhart')) c 
+join (select * from route where concat(num, company) in (select concat(r2.num, r2.company) from route r2 
+join stops s2 on r2.stop = s2.id 
+where s2.name='Lochend')) l on  c.stop = l.stop
+join stops s on s.id = l.stop
+order by c.num, s.name, l.num
+--or
+ SELECT DISTINCT  a.num, a.company, 
+         trans1.name,  d.num,  d.company
+FROM route a JOIN route b
+ON (a.company = b.company AND a.num = b.num)
+JOIN route c ON (b.stop=c.stop AND b.num!=c.num)
+JOIN route d on (c.company = d.company AND c.num = d.num)
+JOIN stops start ON (a.stop=start.id)
+JOIN stops trans1 ON (b.stop = trans1.id)
+JOIN stops trans2 ON (c.stop = trans2.id)
+JOIN stops end ON (d.stop =  end.id)
+WHERE  start.name = 'Craiglockhart' AND end.name = 'Lochend'
+AND  trans1.name = trans2.name
+order by a.num, trans1.name, d.num
+                                                         
