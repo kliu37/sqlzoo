@@ -41,6 +41,20 @@ where a.stop = 115
 and b.stop = 137
 
 --8. Give a list of the services which connect the stops 'Craiglockhart' and 'Tollcross'
+select distinct r1.company, r1.num from route r1 
+join route r2 on (r1.num = r2.num and r1.company = r2.company)
+join stops s1 on r1.stop = s1.id
+join stops s2 on r2.stop = s2.id
+where s1.name = 'Craiglockhart' and s2.name = 'Tollcross'
+
+
+--9. Give a distinct list of the stops which may be reached from 'Craiglockhart' by taking one bus, including 'Craiglockhart' itself, offered by the LRT company. Include the company and bus no. of the relevant services.
+select distinct s2.name, r1.company, r1.num from route r1
+join route r2 on (r1.num = r2.num and r1.company = r2.company)
+join stops s1 on r1.stop = s1.id
+join stops s2 on r2.stop = s2.id
+where r1.company = 'LRT'
+and s1.name = 'Craiglockhart'
 
 
 /*10.
