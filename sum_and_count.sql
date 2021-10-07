@@ -10,5 +10,5 @@ Will be No result due to invalid use of the WHERE function. Because you cannot u
  GROUP BY region
  having SUM(area) > 15000000 */
   
---8. List the continents that have a total population of at least 100 million.
+--8. List the continents that have a total population of at least 100 million. (the where clause cannot be used with aggregates, but the having clause can)
 select continent from world group by continent having sum(population) > 100000000
